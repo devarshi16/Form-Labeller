@@ -15,6 +15,7 @@ from log_debug import logger,debug
 class GUI():
     def __init__(self):
         self.root = ThemedTk(theme="radiance")
+        INIT_WIDTH,INIT_HEIGHT = self.root.winfo_screenwidth(),self.root.winfo_screenheight()
         boldStyle = ttk.Style ()
         boldStyle.configure("Bold.TButton", font = ('Sans','12','bold'))
         #icon_loc = os.path.join(os.getcwd(),ICON_NAME)
@@ -134,7 +135,10 @@ class GUI():
 
     def load_directory(self):
         while True:
-            self.root.directory = filedialog.askdirectory()
+            selection = filedialog.askdirectory()
+            if selection == ():
+                return
+            self.root.directory = selection
             self.image_dir = self.root.directory
             file_names = os.listdir(self.image_dir)
             self.images_in_dir = [] 
@@ -170,7 +174,7 @@ class GUI():
             self.prev_img_button.config(state = "normal")
         self.image_name = self.images_in_dir[self.curr_idx]
         self.load_new_img()
-        self.root.title("Form Labeller - "+self.image_name)
+        self.root.title("Form Labeller - "+self.image_name+"("+str(self.curr_idx+1)+"/"+str(len(self.images_in_dir))+")")
 
     def previous_img(self):
         if self.curr_idx == 1:
