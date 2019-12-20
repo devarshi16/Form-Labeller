@@ -83,12 +83,12 @@ class Polygon():
             if self.select_poly == False:
                 self.canvas.itemconfigure(CURRENT,fill = 'red',stipple='gray50')
                 self.select_poly = True
-                self.show_type()
+                #self.show_type()
                 self.points_bigger()
             elif self.select_poly == True:
                 self.canvas.itemconfigure(CURRENT,fill = '',stipple='')
                 self.select_poly = False
-                self.unshow_type()
+                #self.unshow_type()
                 self.points_smaller()
                 self.canvas.tag_raise(self.polygon)
                 self.draw_points()
@@ -171,8 +171,8 @@ class Polygon():
 
     # Triggered when a point is press and moved
     def motion(self,event):
-        if self.select_poly:
-            self.unshow_type()
+        #if self.select_poly:
+        #    self.unshow_type()
         self.root.config(cursor = "crosshair")
         self.point_in_use = event.widget
         self.point_in_use.itemconfigure(CURRENT,fill = "red")
@@ -192,8 +192,8 @@ class Polygon():
         event.widget.unbind("<B1-Motion>")
         self.root.config(cursor = "")
         self.canvas.itemconfigure(CURRENT,fill="green")
-        if self.select_poly:
-            self.show_type()
+        #if self.select_poly:
+        #    self.show_type()
 
     def deselect_poly(self):
         if self.select_poly == False:
@@ -201,7 +201,7 @@ class Polygon():
         else:
             self.canvas.itemconfigure(self.polygon,fill = '',stipple='')
             self.select_poly = False
-            self.unshow_type()
+            #self.unshow_type()
             self.down_inside_poly = False
             self.points_smaller()
 

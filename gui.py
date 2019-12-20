@@ -67,6 +67,12 @@ class GUI():
 
         self.discard_poly_button = Button(self.top_frame,text = 'Discard Poly',command = self.discard_drawing,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
 
+        self.show_type_button = Button(self.top_frame, text = 'Show Type', command = self.show_type, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
+        self.show_type_button.grid(row = 8, column =0, columnspan = 1, sticky = tk.W+tk.E)
+        
+        self.hide_type_button = Button(self.top_frame, text = 'Hide Type', command = self.hide_type, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
+        self.hide_type_button.grid(row = 8, columnspan = 1, column = 1, sticky = tk.W+tk.E)
+
         self.canvas = Canvas(self.bottom_frame,width = INIT_WIDTH - BUTTON_WIDTH, height = INIT_HEIGHT, borderwidth = 1)
         self.image_name = None
         #self.image_path = os.path.join('imgs','img1.jpg')
@@ -83,6 +89,15 @@ class GUI():
         self.hide_buttons()
         self.load_image_directory_button.config(state = "normal")
 
+    def show_type(self):
+        for poly in self.img_cnv.polygons:
+            if poly.select_poly:
+                poly.show_type()
+
+    def hide_type(self):
+        for poly in self.img_cnv.polygons:
+            poly.unshow_type()
+
     def hide_buttons(self):
         self.load_image_directory_button.config(state=tk.DISABLED)
         self.save_image_button.config(state=tk.DISABLED)
@@ -90,6 +105,8 @@ class GUI():
         self.save_type_button.config(state=tk.DISABLED)
         self.deselect_all_button.config(state=tk.DISABLED)
         self.delete_all_button.config(state = tk.DISABLED)
+        self.show_type_button.config(state = tk.DISABLED)
+        self.hide_type_button.config(state = tk.DISABLED)
 
     def show_buttons(self):
         self.load_image_directory_button.config(state="normal")
@@ -98,12 +115,15 @@ class GUI():
         self.save_type_button.config(state="normal")
         self.deselect_all_button.config(state="normal")
         self.delete_all_button.config(state = "normal")
+        self.show_type_button.config(state = "normal")
+        self.hide_type_button.config(state = "normal")
 
     def deselect_all(self): 
         self.img_cnv.polygons_mutex.acquire()
         for poly in self.img_cnv.polygons:
             poly.deselect_poly()
         self.img_cnv.polygons_mutex.release()
+        self.hide_type()
 
     def delete_all(self): 
         self.img_cnv.polygons_mutex.acquire()
@@ -120,8 +140,8 @@ class GUI():
                     poly.poly_type = None
                 else:
                     poly.poly_type = selected_option
-                poly.unshow_type()
-                poly.show_type()
+                #poly.unshow_type()
+                #poly.show_type()
         self.img_cnv.polygons_mutex.release()
         self.variable.set(self.type_choices[0])
         self.deselect_all()
