@@ -21,6 +21,7 @@ class Polygon():
         self.point_in_use = None
         self.poly_type = None
         self.type_text = None
+        self.type_bg = None
         self.radius = radius 
         self.inside_poly = False
         self.down_inside_poly = False
@@ -63,6 +64,10 @@ class Polygon():
         self.canvas.delete(self.polygon)
         if self.type_text != None:
             self.canvas.delete(self.type_text)
+            self.type_text = None
+        if self.type_bg != None:
+            self.canvas.delete(self.type_bg)
+            self.type_text = None
 
     def leave_poly(self,event):
         self.inside_poly = False
@@ -112,11 +117,15 @@ class Polygon():
             text = "None"
         else:
             text = self.poly_type
-        self.type_text = self.canvas.create_text(*center,anchor=tk.CENTER,fill='yellow',font=("Times", FONT_SIZE,'bold'),text=text)
+        self.type_text = self.canvas.create_text(*center,anchor=tk.CENTER,font=("Times", FONT_SIZE,'bold'),text=text)
+        self.type_bg = self.canvas.create_rectangle(self.canvas.bbox(self.type_text),fill="white")
+        self.canvas.tag_lower(self.type_bg,self.type_text)
 
     def unshow_type(self):
         self.canvas.delete(self.type_text)
+        self.canvas.delete(self.type_bg)
         self.type_text = None
+        self.type_bg = None
 
     # Triggered when cursor enters the bound widget(A point in our case)
     def enter(self,event):

@@ -35,26 +35,26 @@ class ImageOnCanvas():
         self.scale_factor = self.img.size[0]/self.img_width
 
     def load_json(self):
-        debug ("Loading json from:"+self.json_path)
+        debug (2,"Loading json from:"+self.json_path)
         try:
             fl =  open(self.json_path,'r')
             data = json.load(fl)
             boxes = data["textBBs"]
             for i,item in enumerate(boxes):
-                print(item)
+                debug (2, str(item))
                 pts = item["poly_points"]
                 for i in range(len(pts)):
                     pts[i][0],pts[i][1] = int(pts[i][0]),int(pts[i][1])
                 self.bbs.append(pts)
                 self.poly_type.append(item["type"])
-                print(self.poly_type)
+                debug (2, str(self.poly_type))
             fl.close()
         except:
             fl = open(self.json_path,'w+')
             data = {"textBBs":[]}
             json.dump(data,fl,indent=4)
             fl.close()
-        debug("Total BBs in json:"+str(len(self.bbs)))
+        debug(3, "Total BBs in json:"+str(len(self.bbs)))
         
     
     def save_json(self,out_dir):
@@ -82,7 +82,7 @@ class ImageOnCanvas():
             os.makedirs(out_dir)
         json_file_path = os.path.join(out_dir,'.'.join(img_name.split('.')[:-1])+'.json')
         print ("Saving json to",json_file_path)
-        debug ("No of polygons drawn: "+str(len(data["textBBs"])))
+        debug (2,"No of polygons drawn: "+str(len(data["textBBs"])))
         with open(json_file_path,'w') as fl:
             json.dump(data,fl,indent=4)
 
@@ -99,6 +99,19 @@ class ImageOnCanvas():
         for i,pt in enumerate(self.poly_type):
             self.polygons[i].poly_type = pt
         self.polygons_mutex.release()
-        debug ("Total Polygons drawn:"+str(len(self.polygons)))
+        debug (3,"Total Polygons drawn:"+str(len(self.polygons)))
 
-    #def add_poly 
+    def add_poly(self, pts):
+        if self.scale_factor == None:
+            self.bbs.append(pts)
+            self.polygons.append(Polygon(self.root,self.canvas,bb,radius=RADIUS))
+        else:
+            pts_copy = pts[:]
+            for i in range(len(pts)):
+                for j in range(2):
+                    pts_copy[i][j] = pts[i][j] * self.scale_factor
+            self.bbs.append(pts_copy)
+            self.polygons.append(Polygon(self.root,self.canvas,pts_copy,radius=RADIUS))
+        self.poly_type.append(None)
+        self.polygons[-1].poly_type = None
+        debug (3,"Polygon added, total polygons: "+ str(len(self.polygons)))

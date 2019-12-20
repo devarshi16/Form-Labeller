@@ -20,7 +20,7 @@
                 ]
             ],
             "id": "0",
-            "type": "Printed Value"
+            "type": "Comment/Info"
         },
         {
             "poly_points": [
@@ -42,17 +42,17 @@
                 ]
             ],
             "id": "1",
-            "type": "Printed Value"
+            "type": "Comment/Info"
         },
         {
             "poly_points": [
                 [
                     871,
-                    2026
+                    2025
                 ],
                 [
                     1509,
-                    2026
+                    2025
                 ],
                 [
                     1509,
@@ -86,7 +86,7 @@
                 ]
             ],
             "id": "3",
-            "type": "Printed Value"
+            "type": "Comment/Info"
         },
         {
             "poly_points": [
@@ -130,7 +130,7 @@
                 ]
             ],
             "id": "5",
-            "type": "Printed Value"
+            "type": "Comment/Info"
         },
         {
             "poly_points": [
@@ -174,7 +174,7 @@
                 ]
             ],
             "id": "7",
-            "type": "Printed Value"
+            "type": "Comment/Info"
         },
         {
             "poly_points": [
@@ -240,7 +240,7 @@
                 ]
             ],
             "id": "10",
-            "type": null
+            "type": "Comment/Info"
         },
         {
             "poly_points": [
@@ -262,7 +262,7 @@
                 ]
             ],
             "id": "11",
-            "type": null
+            "type": "Comment/Info"
         }
     ]
 }

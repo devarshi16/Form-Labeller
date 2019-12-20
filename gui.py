@@ -225,9 +225,10 @@ class GUI():
             for i in range(len(new_poly_pts)):
                 for j in range(2):
                     new_poly_pts[i][j] = new_poly_pts[i][j] / self.img_cnv.scale_factor
-        self.img_cnv.bbs.append(new_poly_pts)
-        self.img_cnv.draw_bbs([self.img_cnv.bbs[-1]])
-
+        self.img_cnv.add_poly(new_poly_pts)
+        #self.img_cnv.bbs.append(new_poly_pts)
+        #self.img_cnv.draw_bbs([self.img_cnv.bbs[-1]])
+        
         self.drawing_obj = None
         self.save_poly_button.grid_forget()
         self.discard_poly_button.grid_forget()
