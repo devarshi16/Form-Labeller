@@ -22,7 +22,7 @@ class Polygon():
         self.poly_type = None
         self.type_text = None
         self.type_bg = None
-        self.radius = radius 
+        self.radius = SMALL_RADIUS 
         self.inside_poly = False
         self.down_inside_poly = False
         self.select_poly = False
@@ -84,10 +84,14 @@ class Polygon():
                 self.canvas.itemconfigure(CURRENT,fill = 'red',stipple='gray50')
                 self.select_poly = True
                 self.show_type()
+                self.points_bigger()
             elif self.select_poly == True:
                 self.canvas.itemconfigure(CURRENT,fill = '',stipple='')
                 self.select_poly = False
                 self.unshow_type()
+                self.points_smaller()
+                self.canvas.tag_raise(self.polygon)
+                self.draw_points()
         self.down_inside_poly = False
 
 
@@ -139,6 +143,8 @@ class Polygon():
     def draw_points(self):
         for i in range(len(self.points)):
             self.update_point(self.points[i],self.pt_coords[i][0],self.pt_coords[i][1])
+        for pt in self.points:
+            self.canvas.tag_raise(pt)
 
     # Updates a single point in self.coords
     def update_point(self,point_id,x,y):
@@ -167,7 +173,7 @@ class Polygon():
     def motion(self,event):
         if self.select_poly:
             self.unshow_type()
-        self.root.config(cursor = "exchange")
+        self.root.config(cursor = "crosshair")
         self.point_in_use = event.widget
         self.point_in_use.itemconfigure(CURRENT,fill = "red")
         x,y = self.point_in_use.canvasx(event.x), self.point_in_use.canvasy(event.y)
@@ -197,3 +203,12 @@ class Polygon():
             self.select_poly = False
             self.unshow_type()
             self.down_inside_poly = False
+            self.points_smaller()
+
+    def points_smaller(self):
+        self.radius = SMALL_RADIUS
+        self.draw_points()
+
+    def points_bigger(self):
+        self.radius = BIG_RADIUS
+        self.draw_points()

@@ -99,13 +99,13 @@ class GUI():
         self.deselect_all_button.config(state="normal")
         self.delete_all_button.config(state = "normal")
 
-    def deselect_all(self): # TODO
+    def deselect_all(self): 
         self.img_cnv.polygons_mutex.acquire()
         for poly in self.img_cnv.polygons:
             poly.deselect_poly()
         self.img_cnv.polygons_mutex.release()
 
-    def delete_all(self): # TODO
+    def delete_all(self): 
         self.img_cnv.polygons_mutex.acquire()
         for poly in self.img_cnv.polygons:
             poly.delete_self()        

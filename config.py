@@ -17,3 +17,5 @@ LOG_FILE = 'form_labeller.log'
 LOGGING = True
 DEBUGGING = True
 ALLOWED_DEBUG_LEVEL = 3
+SMALL_RADIUS = 1
+BIG_RADIUS = 5
