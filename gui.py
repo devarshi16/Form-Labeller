@@ -26,20 +26,22 @@ class GUI():
         self.root.maxsize(INIT_WIDTH,INIT_HEIGHT)
         self.supported_formats = SUPPORTED_FORMATS
 
-        self.top_frame = Frame(self.root,width = BUTTON_WIDTH)
+        self.left_frame = Frame(self.root,width = BUTTON_WIDTH)
+        self.top_frame1 = Frame(self.left_frame,width = BUTTON_WIDTH,height = int(INIT_HEIGHT/2))
+        self.top_frame = Frame(self.left_frame,width = BUTTON_WIDTH,height = INIT_HEIGHT - int(INIT_HEIGHT/2))
         self.bottom_frame = Frame(self.root,width = INIT_WIDTH - BUTTON_WIDTH)
 
-        self.load_image_directory_button = Button(self.top_frame,text = 'Load Directory',command=self.load_directory,width = int(BUTTON_WIDTH), style ="Bold.TButton")
+        self.load_image_directory_button = Button(self.top_frame1,text = 'Load Directory',command=self.load_directory,width = int(BUTTON_WIDTH), style ="Bold.TButton")
         self.load_image_directory_button.grid(row = 0,columnspan = 2,sticky = tk.W+tk.E)
 
-        self.prev_img_button = Button(self.top_frame,text = 'Prev Image',command=self.previous_img,state = tk.DISABLED,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
+        self.prev_img_button = Button(self.top_frame1,text = 'Prev Image',command=self.previous_img,state = tk.DISABLED,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
         self.prev_img_button.grid(row= 1, column = 0,sticky = tk.W+tk.E)
 
-        self.next_img_button = Button(self.top_frame,text = 'Next Image',command=self.next_img,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
+        self.next_img_button = Button(self.top_frame1,text = 'Next Image',command=self.next_img,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
         self.next_img_button.grid(row=1,column=1,sticky = tk.W+tk.E)
 
-        self.save_image_button = Button(self.top_frame, text = 'Save Json', command = self.saver,width = int(BUTTON_WIDTH), style ="Bold.TButton")
-        self.save_image_button.grid(row = 2, columnspan = 2,sticky = tk.W+tk.E)
+        self.save_image_button = Button(self.top_frame1, text = 'Save Json', command = self.saver,width = int(BUTTON_WIDTH), style ="Bold.TButton")
+        self.save_image_button.grid(row = 9, columnspan = 2,sticky = tk.W+tk.E)
         
         self.delete_poly_button = Button(self.top_frame,text = 'Delete Polygon',command = self.delete_selected,width = int(BUTTON_WIDTH), style ="Bold.TButton")
         self.delete_poly_button.grid(row=3,columnspan =2,sticky = tk.W+tk.E)
@@ -83,7 +85,9 @@ class GUI():
         #self.img_cnv = ImageOnCanvas(self.root,self.canvas,self.image_path)
         self.drawing_obj = None
 
-        self.top_frame.pack(side = tk.LEFT)
+        self.left_frame.pack(side = tk.LEFT)
+        self.top_frame1.pack(side = tk.TOP)
+        self.top_frame.pack(side = tk.TOP)
         self.bottom_frame.pack(side = tk.LEFT)
         self.canvas.pack()
         self.hide_buttons()
