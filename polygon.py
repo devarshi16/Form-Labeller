@@ -22,6 +22,7 @@ class Polygon():
         self.poly_type = None
         self.type_text = None
         self.type_bg = None
+        self.now_showing_type = False
         self.radius = SMALL_RADIUS 
         self.inside_poly = False
         self.down_inside_poly = False
@@ -112,6 +113,10 @@ class Polygon():
             )
     
     def show_type(self):
+        if not self.now_showing_type:
+            self.now_showing_type = True
+        else:
+            return
         sums = [0,0]
         for row in self.pt_coords:
             for i , num in enumerate(row):
@@ -126,6 +131,10 @@ class Polygon():
         self.canvas.tag_lower(self.type_bg,self.type_text)
 
     def unshow_type(self):
+        if self.now_showing_type:
+            self.now_showing_type = False
+        else:
+            return
         self.canvas.delete(self.type_text)
         self.canvas.delete(self.type_bg)
         self.type_text = None
