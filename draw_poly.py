@@ -1,6 +1,7 @@
 from tkinter import Tk,Canvas
 import tkinter as tk
 from config import *
+from log_debug import *
 import os
 
 class DrawPoly():
@@ -10,14 +11,14 @@ class DrawPoly():
        self.img_on_cnv = img_on_cnv
        self.points = []
        self.pt_coords = []
-       self.radius = radius
+       self.radius = SMALL_RADIUS
        self.canvas.update()       
        self.canvas.bind('<ButtonRelease-1>',self.draw_point)
 
     def draw_point(self,event):
         print("inside draw point")
         if self.img_on_cnv.drawing_polygon == False:
-            print("no point being drawn because not drawing polygon")
+            debug (1,"no point being drawn because not drawing polygon")
             return
         else:
             x,y = event.x,event.y
