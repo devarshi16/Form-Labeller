@@ -214,6 +214,14 @@ class Polygon():
             self.down_inside_poly = False
             self.points_smaller()
 
+    def select_polygon(self):
+        if self.select_poly == True:
+            pass
+        else:
+            self.canvas.itemconfigure(self.polygon,fill = 'red',stipple='gray50')
+            self.select_poly = True 
+            self.points_bigger()
+
     def points_smaller(self):
         self.radius = SMALL_RADIUS
         self.draw_points()
