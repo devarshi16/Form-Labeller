@@ -132,6 +132,7 @@ class GUI():
             poly.select_polygon()
 
     def deselect_all(self): 
+        self.hide_type()
         for poly in self.img_cnv.polygons:
             poly.deselect_poly()
 
