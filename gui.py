@@ -1,5 +1,5 @@
 #from tkinter import Tk,Canvas,Button,Frame,filedialog,Message,Toplevel,StringVar,OptionMenu
-from tkinter import Canvas,filedialog,Message,Toplevel,StringVar
+from tkinter import Canvas,filedialog,Message,Toplevel,StringVar,messagebox
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import Button,Frame,OptionMenu
@@ -43,7 +43,7 @@ class GUI():
         self.save_image_button = Button(self.top_frame1, text = 'Save ', command = self.saver,width = int(BUTTON_WIDTH), style ="Bold.TButton")
         self.save_image_button.grid(row = 2, columnspan = 2,sticky = tk.W+tk.E)
         
-        self.delete_poly_button = Button(self.top_frame,text = 'Delete Polygon',command = self.delete_selected,width = int(BUTTON_WIDTH), style ="Bold.TButton")
+        self.delete_poly_button = Button(self.top_frame,text = 'Delete Selected',command = self.delete_selected,width = int(BUTTON_WIDTH), style ="Bold.TButton")
         self.delete_poly_button.grid(row=0,columnspan =2,sticky = tk.W+tk.E)
 
         self.type_choices = TYPE_CHOICES
@@ -130,6 +130,10 @@ class GUI():
         self.hide_type()
 
     def delete_all(self): 
+        result =  messagebox.askyesno("Confirm Delete All","Delete All Annotations?")
+        if not result:
+            return
+
         self.img_cnv.polygons_mutex.acquire()
         for poly in self.img_cnv.polygons:
             poly.delete_self()        

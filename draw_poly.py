@@ -16,9 +16,9 @@ class DrawPoly():
        self.canvas.bind('<ButtonRelease-1>',self.draw_point)
 
     def draw_point(self,event):
-        print("inside draw point")
+        debug (1, "inside draw point")
         if self.img_on_cnv.drawing_polygon == False:
-            debug (1,"no point being drawn because not drawing polygon")
+            debug (2,"no point being drawn because not drawing polygon")
             return
         else:
             x,y = event.x,event.y
