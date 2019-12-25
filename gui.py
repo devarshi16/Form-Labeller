@@ -140,11 +140,12 @@ class GUI():
         result =  messagebox.askyesno("Confirm Delete All","Delete All Annotations?")
         if not result:
             return
-
-        self.img_cnv.polygons_mutex.acquire()
-        for poly in self.img_cnv.polygons:
-            poly.delete_self()        
-        self.img_cnv.polygons_mutex.release()
+        self.select_all()
+        self.delete_selected()
+        #self.img_cnv.polygons_mutex.acquire()
+        #for poly in self.img_cnv.polygons:
+        #    poly.delete_self()        
+        #self.img_cnv.polygons_mutex.release()
 
     def save_type(self):
         selected_option = self.variable.get()
