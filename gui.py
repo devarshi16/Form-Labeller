@@ -304,10 +304,15 @@ class GUI():
         #for pt in self.drawing_obj.points:
         #    self.canvas.delete(pt)
         self.drawing_obj.delete_self()
+        if isinstance(self.drawing_obj,DrawRect):
+            self.save_rect_button.grid_forget()
+            self.discard_rect_button.grid_forget()
+            self.draw_rect_button.grid(row = DRAW_RECT_ROW, columnspan = 2, sticky = tk.W + tk.E)
+        elif isinstance(self.drawing_obj,DrawPoly):
+            self.save_poly_button.grid_forget()
+            self.discard_poly_button.grid_forget()
+            self.draw_poly_button.grid(row = DRAW_POLY_ROW, columnspan = 2, sticky = tk.W + tk.E)
         self.drawing_obj = None
-        self.save_poly_button.grid_forget()
-        self.discard_poly_button.grid_forget()
-        self.draw_poly_button.grid(row = DRAW_POLY_ROW,columnspan = 2, sticky = tk.W+tk.E)
     
     
 gui = GUI()
