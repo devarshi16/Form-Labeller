@@ -11,6 +11,7 @@ class DrawPoly():
        self.img_on_cnv = img_on_cnv
        self.points = []
        self.pt_coords = []
+       self.polygon = None
        self.radius = SMALL_RADIUS
        self.canvas.update()       
        self.canvas.bind('<ButtonRelease-1>',self.draw_point)
@@ -52,3 +53,11 @@ class DrawPoly():
         self.canvas.delete(pt)
         self.points.pop(index_pt)
         self.pt_coords.pop(index_pt)
+
+    def delete_self(self):
+        #self.canvas.delete(self.polygon)
+        for pt in self.points:
+            self.canvas.delete(pt)
+        self.pt_coords = []
+        self.polygon = None
+        self.canvas.update()

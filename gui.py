@@ -9,6 +9,7 @@ import json
 import os
 from canvas import ImageOnCanvas
 from draw_poly import DrawPoly
+from draw_rect import DrawRect
 from PIL import Image,ImageTk
 from log_debug import logger,debug
 
@@ -32,51 +33,58 @@ class GUI():
         self.bottom_frame = Frame(self.root,width = INIT_WIDTH - BUTTON_WIDTH)
 
         self.load_image_directory_button = Button(self.top_frame1,text = 'Open Folder',command=self.load_directory,width = int(BUTTON_WIDTH), style ="Bold.TButton")
-        self.load_image_directory_button.grid(row = 0,columnspan = 2,sticky = tk.W+tk.E)
+        self.load_image_directory_button.grid(row = OPEN_FOLDER_ROW,columnspan = 2,sticky = tk.W+tk.E)
 
         self.prev_img_button = Button(self.top_frame1,text = '← Prev',command=self.previous_img,state = tk.DISABLED,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
-        self.prev_img_button.grid(row= 1, column = 0,sticky = tk.W+tk.E)
+        self.prev_img_button.grid(row= PREV_ROW, column = 0,sticky = tk.W+tk.E)
 
         self.next_img_button = Button(self.top_frame1,text = 'Next → ',command=self.next_img,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
-        self.next_img_button.grid(row=1,column=1,sticky = tk.W+tk.E)
+        self.next_img_button.grid(row=NEXT_COL,column=1,sticky = tk.W+tk.E)
 
         self.save_image_button = Button(self.top_frame1, text = 'Save ', command = self.saver,width = int(BUTTON_WIDTH), style ="Bold.TButton")
-        self.save_image_button.grid(row = 2, columnspan = 2,sticky = tk.W+tk.E)
+        self.save_image_button.grid(row = SAVE_ROW, columnspan = 2,sticky = tk.W+tk.E)
         
         self.delete_poly_button = Button(self.top_frame,text = 'Delete Selected',command = self.delete_selected,width = int(BUTTON_WIDTH), style ="Bold.TButton")
-        self.delete_poly_button.grid(row=0,columnspan =2,sticky = tk.W+tk.E)
+        self.delete_poly_button.grid(row=DEL_SELECTED_ROW,columnspan =2,sticky = tk.W+tk.E)
 
         self.type_choices = TYPE_CHOICES
         self.variable = StringVar(self.top_frame)
         self.variable.set(self.type_choices[0])
         self.type_options = OptionMenu(self.top_frame,self.variable,*self.type_choices,style ="Bold.TButton")
         self.type_options.config(width = int(BUTTON_WIDTH/2))
-        self.type_options.grid(row = 1,column = 0)
+        self.type_options.grid(row = DROP_DOWN_ROW,column = 0)
 
         self.save_type_button = Button(self.top_frame, text = 'Save Type', command = self.save_type,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
-        self.save_type_button.grid(row = 1, column = 1,sticky = tk.W+tk.E)
+        self.save_type_button.grid(row = SAVE_TYPE_ROW, column = 1,sticky = tk.W+tk.E)
 
         self.deselect_all_button = Button(self.top_frame,text = 'Deselect All',command = self.deselect_all,width = BUTTON_WIDTH, style ="Bold.TButton")
-        self.deselect_all_button.grid(row = 2,columnspan = 2,sticky = tk.W+tk.E)
+        self.deselect_all_button.grid(row = DESELECT_ALL_ROW,columnspan = 2,sticky = tk.W+tk.E)
 
         self.select_all_button = Button(self.top_frame,text = 'Select All', command = self.select_all, width = BUTTON_WIDTH, style ="Bold.TButton")
-        self.select_all_button.grid(row = 3,columnspan = 2,sticky = tk.W+tk.E)
+        self.select_all_button.grid(row = SELECT_ALL_ROW,columnspan = 2,sticky = tk.W+tk.E)
 
         self.draw_poly_button = Button(self.top_frame,text = 'Draw Poly',command = self.draw_poly_func,width = BUTTON_WIDTH, style ="Bold.TButton")
-        self.draw_poly_button.grid(row = 4,columnspan = 2,sticky = tk.W+tk.E)
+        self.draw_poly_button.grid(row = DRAW_POLY_ROW,columnspan = 2,sticky = tk.W+tk.E)
+
+        self.draw_rect_button = Button(self.top_frame,text = 'Draw Rectangle',command = self.draw_rect_func,width = BUTTON_WIDTH, style ="Bold.TButton")
+        self.draw_rect_button.grid(row = DRAW_RECT_ROW,columnspan = 2,sticky = tk.W+tk.E)
 
         self.delete_all_button = Button(self.top_frame,text = 'Delete All',command = self.delete_all,width = BUTTON_WIDTH, style ="Bold.TButton")
-        self.delete_all_button.grid(row = 5,columnspan = 2,sticky = tk.W+tk.E)   
+        self.delete_all_button.grid(row = DELETE_ALL_ROW,columnspan = 2,sticky = tk.W+tk.E)   
 
         self.save_poly_button = Button(self.top_frame,text = 'Save Poly',command = self.save_drawing,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
 
         self.discard_poly_button = Button(self.top_frame,text = 'Discard Poly',command = self.discard_drawing,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
 
+        self.save_rect_button = Button(self.top_frame,text = 'Save Rect',command = self.save_drawing,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
+
+        self.discard_rect_button = Button(self.top_frame,text = 'Discard Rect',command = self.discard_drawing,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
+
         self.show_type_button = Button(self.top_frame, text = 'Show Type', command = self.show_type, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
-        self.show_type_button.grid(row = 6, column =0, columnspan = 1, sticky = tk.W+tk.E)
+        self.show_type_button.grid(row = SHOW_TYPE_ROW, column =0, columnspan = 1, sticky = tk.W+tk.E)
         
         self.hide_type_button = Button(self.top_frame, text = 'Hide Type', command = self.hide_type, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
-        self.hide_type_button.grid(row = 6, columnspan = 1, column = 1, sticky = tk.W+tk.E)
+        self.hide_type_button.grid(row = HIDE_TYPE_ROW, columnspan = 1, column = 1, sticky = tk.W+tk.E)
 
         self.canvas = Canvas(self.bottom_frame,width = INIT_WIDTH - BUTTON_WIDTH, height = INIT_HEIGHT, borderwidth = 1)
         self.image_name = None
@@ -126,6 +134,8 @@ class GUI():
         self.delete_all_button.config(state = "normal")
         self.show_type_button.config(state = "normal")
         self.hide_type_button.config(state = "normal")
+        self.draw_poly_button.config(state = "normal")
+        self.draw_rect_button.config(state = "normal")
 
     def select_all(self):
         for poly in self.img_cnv.polygons:
@@ -167,12 +177,12 @@ class GUI():
         self.img_cnv = None
         path = os.path.join(self.image_dir, self.image_name)
         self.img_cnv = ImageOnCanvas(self.root,self.canvas,path)
-        logger("LOADING: "+self.img_cnv.image_path)
+        logger("LOADED: "+self.img_cnv.image_path)
 
     def load_directory(self):
         while True:
             selection = filedialog.askdirectory()
-            if selection == ():
+            if selection == () or selection == '':
                 return
             self.root.directory = selection
             self.image_dir = self.root.directory
@@ -246,10 +256,21 @@ class GUI():
         self.deselect_all()
         self.img_cnv.drawing_polygon = True
         self.draw_poly_button.grid_forget()
-        self.save_poly_button.grid(row = 4, column = 0,sticky = tk.W+tk.E)
-        self.discard_poly_button.grid(row = 4, column = 1,sticky = tk.W+tk.E)
+        self.save_poly_button.grid(row = DRAW_POLY_ROW, column = 0,sticky = tk.W+tk.E)
+        self.discard_poly_button.grid(row = DRAW_POLY_ROW, column = 1,sticky = tk.W+tk.E)
         self.hide_buttons()
+        self.draw_rect_button.config(state=tk.DISABLED)
         self.drawing_obj = DrawPoly(self.bottom_frame,self.canvas,self.img_cnv,RADIUS)
+
+    def draw_rect_func(self):
+        self.deselect_all()
+        self.img_cnv.drawing_polygon = True
+        self.draw_rect_button.grid_forget()
+        self.save_rect_button.grid(row = DRAW_RECT_ROW, column = 0,sticky = tk.W+tk.E)
+        self.discard_rect_button.grid(row = DRAW_RECT_ROW, column = 1,sticky = tk.W+tk.E)
+        self.hide_buttons()
+        self.draw_poly_button.config(state=tk.DISABLED)
+        self.drawing_obj = DrawRect(self.bottom_frame,self.canvas,self.img_cnv,RADIUS)
 
     def save_drawing(self):
         self.show_buttons()
@@ -265,21 +286,33 @@ class GUI():
         self.img_cnv.add_poly(new_poly_pts)
         #self.img_cnv.bbs.append(new_poly_pts)
         #self.img_cnv.draw_bbs([self.img_cnv.bbs[-1]])
-        
+        #debug (1, str(type(self.drawing_obj))) 
+        if isinstance(self.drawing_obj,DrawRect):
+            self.save_rect_button.grid_forget()
+            self.discard_rect_button.grid_forget()
+            self.draw_rect_button.grid(row = DRAW_RECT_ROW, columnspan = 2, sticky = tk.W + tk.E)
+        elif isinstance(self.drawing_obj,DrawPoly):
+            self.save_poly_button.grid_forget()
+            self.discard_poly_button.grid_forget()
+            self.draw_poly_button.grid(row = DRAW_POLY_ROW, columnspan = 2, sticky = tk.W + tk.E)
+        self.drawing_obj.delete_self()        
         self.drawing_obj = None
-        self.save_poly_button.grid_forget()
-        self.discard_poly_button.grid_forget()
-        self.draw_poly_button.grid(row = 4,columnspan = 2,sticky = tk.W+tk.E)
 
     def discard_drawing(self):
         self.show_buttons()
         self.img_cnv.drawing_polygon = False
-        for pt in self.drawing_obj.points:
-            self.canvas.delete(pt)
+        #for pt in self.drawing_obj.points:
+        #    self.canvas.delete(pt)
+        self.drawing_obj.delete_self()
+        if isinstance(self.drawing_obj,DrawRect):
+            self.save_rect_button.grid_forget()
+            self.discard_rect_button.grid_forget()
+            self.draw_rect_button.grid(row = DRAW_RECT_ROW, columnspan = 2, sticky = tk.W + tk.E)
+        elif isinstance(self.drawing_obj,DrawPoly):
+            self.save_poly_button.grid_forget()
+            self.discard_poly_button.grid_forget()
+            self.draw_poly_button.grid(row = DRAW_POLY_ROW, columnspan = 2, sticky = tk.W + tk.E)
         self.drawing_obj = None
-        self.save_poly_button.grid_forget()
-        self.discard_poly_button.grid_forget()
-        self.draw_poly_button.grid(row = 4,columnspan = 2, sticky = tk.W+tk.E)
     
     
 gui = GUI()
