@@ -12,7 +12,21 @@ TYPE_CHOICES = ["None",
     "Printed Value", "Written Value",
     "Check Box Key", "Check Box Value",
     "Comment/Info", "Logo", 
-    "Signature", "Photograph"]
+    "Signature", "Photograph"
+    ]
+    '''
+TYPE_CHOICES = ["None",
+    "ADDRESS",
+    "NAME",
+    "DOB",
+    "GENDER",
+    "AADHAAR",
+    "MOBILE",
+    "PHOTO",
+    "BARCODE",
+    "QR"
+    ]
+    '''
 FONT_SIZE = 11
 ICON_NAME = 'icon.ico'
 LOG_FILE = 'form_labeller.log'
