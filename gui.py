@@ -1,5 +1,5 @@
 #from tkinter import Tk,Canvas,Button,Frame,filedialog,Message,Toplevel,StringVar,OptionMenu
-from tkinter import Canvas,filedialog,Message,Toplevel,StringVar,messagebox
+from tkinter import Canvas,filedialog,Message,Toplevel,StringVar,messagebox,Scale,HORIZONTAL
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import Button,Frame,OptionMenu
@@ -12,6 +12,7 @@ from draw_poly import DrawPoly
 from draw_rect import DrawRect
 from PIL import Image,ImageTk
 from log_debug import logger,debug
+from tight_box import TightBox
 
 class GUI():
     def __init__(self):
@@ -70,7 +71,6 @@ class GUI():
         self.draw_rect_button.grid(row = DRAW_RECT_ROW,columnspan = 2,sticky = tk.W+tk.E)
 
         self.delete_all_button = Button(self.top_frame,text = 'Delete All',command = self.delete_all,width = BUTTON_WIDTH, style ="Bold.TButton")
-        self.delete_all_button.grid(row = DELETE_ALL_ROW,columnspan = 2,sticky = tk.W+tk.E)   
 
         self.save_poly_button = Button(self.top_frame,text = 'Save Poly',command = self.save_drawing,width = int(BUTTON_WIDTH/2), style ="Bold.TButton")
 
@@ -85,6 +85,17 @@ class GUI():
         
         self.hide_type_button = Button(self.top_frame, text = 'Hide Type', command = self.hide_type, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
         self.hide_type_button.grid(row = HIDE_TYPE_ROW, columnspan = 1, column = 1, sticky = tk.W+tk.E)
+        
+        self.make_tight_button = Button(self.top_frame, text = 'Make Tight', command = self.make_tight, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
+        self.make_tight_button.grid(row = MAKE_TIGHT_ROW, columnspan = 2, column = 0, sticky = tk.W + tk.E)
+
+        self.threshold_scale = Scale(self.top_frame, from_ = 0, to = 255, orient = HORIZONTAL, width = int(BUTTON_WIDTH/2), label = "Binary Threshold")
+        self.threshold_scale.set(128)
+        self.threshold_scale.grid(row = THRESHOLD_ROW, columnspan = 2, column = 0, sticky = tk.W + tk.E)
+
+        self.tight_save_button = Button(self.top_frame, text = 'Accept Tight', command = self.save_tight)
+
+        self.tight_discard_button = Button(self.top_frame, text = 'Discard Tight', command = self.discard_tight)
 
         self.canvas = Canvas(self.bottom_frame,width = INIT_WIDTH - BUTTON_WIDTH, height = INIT_HEIGHT, borderwidth = 1)
         self.image_name = None
@@ -95,6 +106,7 @@ class GUI():
         self.img_cnv = None
         #self.img_cnv = ImageOnCanvas(self.root,self.canvas,self.image_path)
         self.drawing_obj = None
+        self.tight_box_obj = None
 
         self.left_frame.pack(side = tk.LEFT)
         self.top_frame1.pack(side = tk.TOP)
@@ -103,6 +115,22 @@ class GUI():
         self.canvas.pack()
         self.hide_buttons()
         self.load_image_directory_button.config(state = "normal")
+        
+    def save_tight(self):
+        self.tight_box_obj.save_tight_box()
+        self.tight_save_button.grid_forget()
+        self.tight_discard_button.grid_forget()
+        self.make_tight_button.grid(row = MAKE_TIGHT_ROW, columnspan=2, sticky = tk.W+tk.E)
+        self.show_buttons()
+        self.tight_box_obj = None
+
+    def discard_tight(self):
+        self.tight_box_obj.discard_tight_box()
+        self.tight_save_button.grid_forget()
+        self.tight_discard_button.grid_forget()
+        self.make_tight_button.grid(row = MAKE_TIGHT_ROW, columnspan=2, sticky = tk.W+tk.E)
+        self.show_buttons()
+        self.tight_box_obj = None
 
     def show_type(self):
         for poly in self.img_cnv.polygons:
@@ -123,6 +151,7 @@ class GUI():
         self.delete_all_button.config(state = tk.DISABLED)
         self.show_type_button.config(state = tk.DISABLED)
         self.hide_type_button.config(state = tk.DISABLED)
+        self.make_tight_button.config(state = tk.DISABLED)
 
     def show_buttons(self):
         self.load_image_directory_button.config(state="normal")
@@ -136,6 +165,7 @@ class GUI():
         self.hide_type_button.config(state = "normal")
         self.draw_poly_button.config(state = "normal")
         self.draw_rect_button.config(state = "normal")
+        self.make_tight_button.config(state = "normal")
 
     def select_all(self):
         for poly in self.img_cnv.polygons:
@@ -313,7 +343,14 @@ class GUI():
             self.discard_poly_button.grid_forget()
             self.draw_poly_button.grid(row = DRAW_POLY_ROW, columnspan = 2, sticky = tk.W + tk.E)
         self.drawing_obj = None
-    
+
+    def make_tight(self):
+        self.hide_buttons()
+        self.tight_box_obj = TightBox(self.root,self.img_cnv,self.threshold_scale.get())
+        self.tight_box_obj.tight_box()
+        self.make_tight_button.grid_forget()
+        self.tight_save_button.grid(row = MAKE_TIGHT_ROW,column=0,columnspan=1, sticky = tk.W + tk.E)
+        self.tight_discard_button.grid(row = MAKE_TIGHT_ROW,column=1,columnspan=1, sticky = tk.W + tk.E)
     
 gui = GUI()
 gui.start_gui()

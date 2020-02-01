@@ -164,6 +164,10 @@ class Polygon():
         ) 
         self.pt_coords[self.points.index(point_id)] = [x,y]
 
+    def get_pt_center(self, point_id):
+        p = self.canvas.coords(point_id)
+        return (int((p[0]+p[2])/2), int((p[1]+p[3])/2)) 
+        
     # Updates the polygon according to the changed point in self.coords
     def update_polygon(self):
         #flatten = lambda l=l: [item for sublist in l for item in sublist]

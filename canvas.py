@@ -27,6 +27,9 @@ class ImageOnCanvas():
         self.draw_bbs(self.bbs)
         self.drawing_polygon = False
 
+    def current_state(self):
+        return self.bbs, self.polygons, self.poly_type, self.drawing_polygon
+
     def resize(self):
         self.canvas.update()
         max_w,max_h = self.canvas.winfo_width(), self.canvas.winfo_height()

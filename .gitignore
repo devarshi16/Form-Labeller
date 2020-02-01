@@ -6,6 +6,8 @@ eKYC/
 # C extensions
 *.so
 form_labeller.log
+# Vim swap files
+*.swp
 # Distribution / packaging
 .Python
 build/

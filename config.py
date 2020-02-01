@@ -14,7 +14,7 @@ TYPE_CHOICES = ["None",
     "Comment/Info", "Logo", 
     "Signature", "Photograph"
     ]
-    '''
+'''
 TYPE_CHOICES = ["None",
     "ADDRESS",
     "NAME",
@@ -26,7 +26,7 @@ TYPE_CHOICES = ["None",
     "BARCODE",
     "QR"
     ]
-    '''
+'''
 FONT_SIZE = 11
 ICON_NAME = 'icon.ico'
 LOG_FILE = 'form_labeller.log'
@@ -54,4 +54,6 @@ DRAW_RECT_ROW, DRAW_RECT_COL = 8,0
 DELETE_ALL_ROW, DELETE_ALL_COL = 9,0
 SHOW_TYPE_ROW,SHOW_TYPE_COL = 10,0
 HIDE_TYPE_ROW,HIDE_TYPE_COL = 10,1
+MAKE_TIGHT_ROW = 11
+THRESHOLD_ROW = 12
 
