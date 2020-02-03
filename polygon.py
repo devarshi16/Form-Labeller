@@ -27,7 +27,8 @@ class Polygon():
         self.inside_poly = False
         self.down_inside_poly = False
         self.select_poly = False
-
+        #self.colors = ["yellow","red","gray","green"]
+        self.colors = ["#FF0000","#FFFF00","#00FF00","#0000FF","#800000","#00FFFF","#FFFFFF","#800080"]
         # Add points to list of points
         self.initialize_points()
         #flatten = lambda l: [item for sublist in l for item in sublist]
@@ -103,11 +104,17 @@ class Polygon():
     # draw circular point widgets on the canvas
     def initialize_points(self):
         for i in range(len(self.pt_coords)):
+            if i < len(self.colors):
+                fill_color = self.colors[i]
+            else:
+                fill_color = "green"
             self.points.append(
                 self.canvas.create_oval(
                     self.pt_coords[i][0]-self.radius,self.pt_coords[i][1]-self.radius,
                     self.pt_coords[i][0]+self.radius,self.pt_coords[i][1]+self.radius,
-                    fill = "green",
+                    activefill = fill_color,
+                    fill = fill_color,
+                    disabledfill = "blue",
                     tag = "Point"
                 )
             )
@@ -142,11 +149,12 @@ class Polygon():
 
     # Triggered when cursor enters the bound widget(A point in our case)
     def enter(self,event):
-        self.canvas.itemconfigure(CURRENT,fill="blue")
+        #self.canvas.itemconfigure(CURRENT,fill="blue")
         self.loc = 1
 
     def leave(self,event):
-        self.canvas.itemconfigure(CURRENT,fill="green")
+        #self.canvas.itemconfigure(CURRENT,fill="green")
+        pass
  
     # Updates location of each point according to the coordinates in self.coords
     def draw_points(self):
@@ -180,7 +188,7 @@ class Polygon():
     def down(self,event):
         self.point_in_use = event.widget 
         event.widget.bind("<B1-Motion>",self.motion)
-        self.canvas.itemconfigure(CURRENT,fill = "red")   
+        #self.canvas.itemconfigure(CURRENT,fill = "black")   
 
     # Triggered when a point is press and moved
     def motion(self,event):
@@ -188,7 +196,7 @@ class Polygon():
         #    self.unshow_type()
         self.root.config(cursor = "crosshair")
         self.point_in_use = event.widget
-        self.point_in_use.itemconfigure(CURRENT,fill = "red")
+        #self.point_in_use.itemconfigure(CURRENT,fill = "black")
         x,y = self.point_in_use.canvasx(event.x), self.point_in_use.canvasy(event.y)
         pt = self.canvas.find_withtag("current")[0]
         self.update_point(
@@ -204,7 +212,7 @@ class Polygon():
     def chkup(self,event):
         event.widget.unbind("<B1-Motion>")
         self.root.config(cursor = "")
-        self.canvas.itemconfigure(CURRENT,fill="green")
+        #self.canvas.itemconfigure(CURRENT,fill="green")
         #if self.select_poly:
         #    self.show_type()
 
