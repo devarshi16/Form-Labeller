@@ -21,6 +21,9 @@ python gui.py
 ### Make Boxes Tight
 ![Alt Text](https://github.com/devarshi16/Form-Labeller/blob/master/tight.gif)
 
+### Assign Types to Boxes
+![Alt Text](https://github.com/devarshi16/Form-Labeller/blob/master/assign_type.gif)
+
 ### Config File
 You can change the name of types to be assigned by changing `TYPE_CHOICES` in config.py
 ```
