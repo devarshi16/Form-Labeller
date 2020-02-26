@@ -139,6 +139,9 @@ THRESHOLD_ROW = 12
 }
 ```
 
+## Raise Issues for Features
+You can raise issues for additional features in the tool. You can contribute to the tool aswell.
+
 ## Example images Acknowledgement
 Stanford dataset [link](https://web.cs.wpi.edu/~claypool/mmsys-dataset/2011/stanford/mvs_images/ "stanford dataset")
 
