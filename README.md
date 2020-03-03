@@ -147,3 +147,24 @@ Stanford dataset [link](https://web.cs.wpi.edu/~claypool/mmsys-dataset/2011/stan
 
 ## License
 [MIT](https://github.com/devarshi16/Form-Labeller/blob/master/LICENSE)
+
+## Citation
+
+<!--
+
+
+List of username-realname matching based on
+https://github.com/devarshi16/Form-Labeller ordered by commits:
+
+devarshi16          Aggarwal, Devarshi
+
+-->
+If this library has helped you during your research, feel free to cite it:
+```latex
+@misc{Form-Labeller,
+  author = {Aggarwal, Devarshi},
+  title = {{Form Labeller}},
+  howpublished = {\url{https://github.com/devarshi16/Form-Labeller}},
+  year = {2020},
+  note = {Online; accessed 01-March-2020}
+}
