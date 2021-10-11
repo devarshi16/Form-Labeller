@@ -13,7 +13,8 @@ class DrawPoly():
        self.pt_coords = []
        self.polygon = None
        self.radius = SMALL_RADIUS
-       self.canvas.update()       
+       self.canvas.update()
+       self.x1, self.y1 = canvas.canvasx(0), canvas.canvasy(0)
        self.canvas.bind('<ButtonRelease-1>',self.draw_point)
 
     def draw_point(self,event):
@@ -22,7 +23,7 @@ class DrawPoly():
             debug (2,"no point being drawn because not drawing polygon")
             return
         else:
-            x,y = event.x,event.y
+            x,y = event.x+self.x1,event.y+self.y1
             if x > self.img_on_cnv.img_width*self.img_on_cnv.scale_factor or y > self.img_on_cnv.img_height*self.img_on_cnv.scale_factor:
                 return
             else:

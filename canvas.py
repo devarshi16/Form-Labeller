@@ -5,20 +5,32 @@ from config import *
 import json
 import os
 from threading import Lock
+from tkinter import Scrollbar,HORIZONTAL,BOTTOM,RIGHT,VERTICAL,X,Y,ALL
 
 class ImageOnCanvas():
-    def __init__(self,root,canvas,image_path):
+    def __init__(self,root,frame,canvas,image_path):
         self.image_path = image_path
         self.json_path = '.'.join(image_path.split('.')[:-1])+".json"
         #self.json_path = '.'.join(os.path.split(image_path)[-1].split('.')[:-1])+".json"
         self.root = root
         self.canvas = canvas
+        
         self.img = Image.open(self.image_path)
         self.img_width,self.img_height = self.img.size
         self.scale_factor = None
         self.imagetk = None
-        self.resize()
+        ###
+        
+       
+        self.canvas.update()
+        #self.img.thumbnail((max_w,max_h),Image.ANTIALIAS)
+        self.imagetk = ImageTk.PhotoImage(self.img)
+        self.scale_factor = self.img.size[0]/self.img_width
+        ####
+        #self.resize()
         self.canvas_img = self.canvas.create_image(0,0,anchor='nw',image=self.imagetk)
+        canvas.config(scrollregion=canvas.bbox(ALL))
+        self.canvas.update()
         self.bbs = []
         self.polygons = []
         self.poly_type = []
@@ -33,7 +45,8 @@ class ImageOnCanvas():
     def resize(self):
         self.canvas.update()
         max_w,max_h = self.canvas.winfo_width(), self.canvas.winfo_height()
-        self.img.thumbnail((max_w,max_h),Image.ANTIALIAS)
+        self.canvas.configure(scrollregion=(0,0,max_w,max_h), yscrollcommand=self.vbar.set, xscrollcommand=self.hbar.set)
+        #self.img.thumbnail((max_w,max_h),Image.ANTIALIAS)
         self.imagetk = ImageTk.PhotoImage(self.img)
         self.scale_factor = self.img.size[0]/self.img_width
 
@@ -57,25 +70,27 @@ class ImageOnCanvas():
             data = {"textBBs":[]}
             json.dump(data,fl,indent=4)
             fl.close()
-        debug(3, "Total BBs in json:"+str(len(self.bbs)))
-        
+        debug(3, "Total BBs in json:"+str(len(self.bbs)))        
     
     def save_json(self,out_dir):
         img_name = os.path.split(self.image_path)[-1]
-
         data = {}
         data["textBBs"]=[]
         self.polygons_mutex.acquire()
         poly_copy = self.polygons[:]
         for j,poly in enumerate(poly_copy):
             pt_data = {}
-            pts = []            
+            pts = []
+            for i in range(len(poly.pt_coords)):
+                pts.append([int(poly.pt_coords[i][0]),int(poly.pt_coords[i][1])])
+            '''            
             if self.scale_factor!=None:
                 for i in range(len(poly.pt_coords)):
                     pts.append([int(poly.pt_coords[i][0]/self.scale_factor),int(poly.pt_coords[i][1]/self.scale_factor)])
             else:
                 for i in range(len(poly.pt_coords)):
                     pts.append([int(poly.pt_coords[i][0]),int(poly.pt_coords[i][1])])
+            '''
             pt_data["poly_points"] = pts
             pt_data["id"] = str(j)
             pt_data["type"] = poly.poly_type

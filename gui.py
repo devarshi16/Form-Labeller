@@ -13,6 +13,7 @@ from draw_rect import DrawRect
 from PIL import Image,ImageTk
 from log_debug import logger,debug
 from tight_box import TightBox
+from tkinter import Scrollbar,HORIZONTAL,BOTTOM,RIGHT,VERTICAL,X,Y
 
 class GUI():
     def __init__(self):
@@ -31,7 +32,7 @@ class GUI():
         self.left_frame = Frame(self.root,width = BUTTON_WIDTH)
         self.top_frame1 = Frame(self.left_frame,width = BUTTON_WIDTH,height = int(INIT_HEIGHT/2))
         self.top_frame = Frame(self.left_frame,width = BUTTON_WIDTH,height = INIT_HEIGHT - int(INIT_HEIGHT/2))
-        self.bottom_frame = Frame(self.root,width = INIT_WIDTH - BUTTON_WIDTH)
+        self.bottom_frame = Frame(self.root,width = INIT_WIDTH - BUTTON_WIDTH,height=INIT_HEIGHT)
 
         self.load_image_directory_button = Button(self.top_frame1,text = 'Open Folder',command=self.load_directory,width = int(BUTTON_WIDTH), style ="Bold.TButton")
         self.load_image_directory_button.grid(row = OPEN_FOLDER_ROW,columnspan = 2,sticky = tk.W+tk.E)
@@ -112,6 +113,19 @@ class GUI():
         self.top_frame1.pack(side = tk.TOP)
         self.top_frame.pack(side = tk.BOTTOM)
         self.bottom_frame.pack(side = tk.LEFT)
+        max_w,max_h = self.canvas.winfo_screenwidth(), self.canvas.winfo_screenheight()
+        self.hbar=Scrollbar(self.bottom_frame,orient=HORIZONTAL)
+        self.hbar.pack(side=BOTTOM,fill=X)
+        self.hbar.config(command=self.canvas.xview)
+        self.vbar=Scrollbar(self.bottom_frame,orient=VERTICAL)
+        self.vbar.pack(side=RIGHT,fill=Y)
+        self.vbar.config(command=self.canvas.yview)
+        max_w,max_h = self.canvas.winfo_width(), self.canvas.winfo_height()
+        self.canvas.configure(
+            #scrollregion=self.canvas.bbox('all'),
+            scrollregion=(0,0,max_w-BUTTON_WIDTH,max_h),
+            yscrollcommand=self.vbar.set, 
+            xscrollcommand=self.hbar.set)
         self.canvas.pack()
         self.hide_buttons()
         self.load_image_directory_button.config(state = "normal")
@@ -206,7 +220,7 @@ class GUI():
         self.canvas.delete('all')
         self.img_cnv = None
         path = os.path.join(self.image_dir, self.image_name)
-        self.img_cnv = ImageOnCanvas(self.root,self.canvas,path)
+        self.img_cnv = ImageOnCanvas(self.root,self.bottom_frame,self.canvas,path)
         logger("LOADED: "+self.img_cnv.image_path)
 
     def load_directory(self):
