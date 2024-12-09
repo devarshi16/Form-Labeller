@@ -22,6 +22,7 @@ class Polygon():
         self.poly_type = None
         self.type_text = None
         self.type_bg = None
+        self.text = None
         self.now_showing_type = False
         self.radius = SMALL_RADIUS 
         self.inside_poly = False

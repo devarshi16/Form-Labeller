@@ -5,7 +5,7 @@ from log_debug import *
 import os
 
 class DrawPoly():
-    def __init__(self,root,canvas,img_on_cnv,radius = 4):
+    def __init__(self,root,canvas,img_on_cnv,radius = 4, finish_func=None):
        self.root = root
        self.canvas = canvas
        self.img_on_cnv = img_on_cnv
@@ -16,6 +16,7 @@ class DrawPoly():
        self.canvas.update()
        self.x1, self.y1 = canvas.canvasx(0), canvas.canvasy(0)
        self.canvas.bind('<ButtonRelease-1>',self.draw_point)
+       self.finish = finish_func
 
     def draw_point(self,event):
         debug (1, "inside draw point")
@@ -39,6 +40,8 @@ class DrawPoly():
                 self.canvas.tag_bind(self.points[-1],"<Enter>",self.enter_point)
                 self.canvas.tag_bind(self.points[-1],"<Leave>",self.leave_point)
                 self.canvas.tag_bind(self.points[-1],"<ButtonRelease-3>",self.chkup_rmb_point)
+                if len(self.points) == 4:
+                    self.finish()
 
     def enter_point(self,event):
         pt = self.canvas.find_withtag("current")[0]

@@ -10,7 +10,7 @@ class TightBox():
         self.changed_poly = []
 
     def tight_box(self):
-        _,polygons,_,_ = self.cnv.current_state()
+        _,polygons,_,_,_ = self.cnv.current_state()
         for p in polygons:
             if p.select_poly:
                 

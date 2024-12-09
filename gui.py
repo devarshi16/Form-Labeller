@@ -1,8 +1,8 @@
 #from tkinter import Tk,Canvas,Button,Frame,filedialog,Message,Toplevel,StringVar,OptionMenu
 from tkinter import Canvas,filedialog,Message,Toplevel,StringVar,messagebox,Scale,HORIZONTAL
 import tkinter as tk
-from tkinter import ttk
-from tkinter.ttk import Button,Frame,OptionMenu
+from tkinter import ttk, Text
+from tkinter.ttk import Button,Frame,OptionMenu,Checkbutton
 from ttkthemes import ThemedTk
 from config import *
 import json
@@ -93,12 +93,23 @@ class GUI():
         self.threshold_scale = Scale(self.top_frame, from_ = 0, to = 255, orient = HORIZONTAL, width = int(BUTTON_WIDTH/2), label = "Binary Threshold")
         self.threshold_scale.set(128)
         self.threshold_scale.grid(row = THRESHOLD_ROW, columnspan = 2, column = 0, sticky = tk.W + tk.E)
+        self.label_text = Text(self.top_frame, width = int(BUTTON_WIDTH), height=int(1))
+        self.label_text.insert(tk.END, "LABEL_CONTENT")
+        self.label_text.grid(row = LABEL_TEXT_ROW, columnspan = 2, column = 0, sticky = tk.W + tk.E)
+        self.show_label_text_button = Button(self.top_frame, text = 'Show Label Text', command = self.show_label_text, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
+        self.show_label_text_button.grid(row = LABEL_TEXT_ROW + 1, columnspan = 1, column = 0, sticky = tk.W + tk.E)
+        self.save_label_text_button = Button(self.top_frame, text = 'Save Label Text', command = self.save_label_text, width = int(BUTTON_WIDTH/2), style = "Bold.TButton")
+        self.save_label_text_button.grid(row = LABEL_TEXT_ROW + 1, columnspan = 1, column = 1, sticky = tk.W + tk.E)
+        self.auto_tight_poly = False
+        self.auto_tight_poly_checkbutton = Checkbutton(self.top_frame, text="Auto Tighten new Polys", variable=self.auto_tight_poly, command=self.toggle_auto_tight)
+        self.auto_tight_poly_checkbutton.grid(row = LABEL_TEXT_ROW + 2, columnspan = 2, column = 0, sticky = tk.W + tk.E)
 
         self.tight_save_button = Button(self.top_frame, text = 'Accept Tight', command = self.save_tight)
 
         self.tight_discard_button = Button(self.top_frame, text = 'Discard Tight', command = self.discard_tight)
 
         self.canvas = Canvas(self.bottom_frame,width = INIT_WIDTH - BUTTON_WIDTH, height = INIT_HEIGHT, borderwidth = 1)
+        self.canvas.bind('<Escape>', self.deselect_all)
         self.image_name = None
         #self.image_path = os.path.join('imgs','img1.jpg')
         self.image_dir = None
@@ -137,6 +148,9 @@ class GUI():
         self.make_tight_button.grid(row = MAKE_TIGHT_ROW, columnspan=2, sticky = tk.W+tk.E)
         self.show_buttons()
         self.tight_box_obj = None
+    
+    def toggle_auto_tight(self):
+        self.auto_tight_poly = not self.auto_tight_poly
 
     def discard_tight(self):
         self.tight_box_obj.discard_tight_box()
@@ -215,6 +229,22 @@ class GUI():
         self.img_cnv.polygons_mutex.release()
         self.variable.set(self.type_choices[0])
         #self.deselect_all()
+    
+    def show_label_text(self):
+        selected_poly = [poly for poly in self.img_cnv.polygons if poly.select_poly]
+        if len(selected_poly) == 1:
+            self.label_text.delete("1.0", "end")
+            selected_poly = selected_poly[0]
+            self.label_text.insert(tk.END, selected_poly.text)
+    
+    def save_label_text(self):
+        selected_poly = [poly for poly in self.img_cnv.polygons if poly.select_poly]
+        self.img_cnv.polygons_mutex.acquire()
+        if len(selected_poly) == 1:
+            new_label = self.label_text.get("1.0", tk.END)
+            print(new_label)
+            selected_poly[0].text = new_label.strip()
+        self.img_cnv.polygons_mutex.release()
 
     def load_new_img(self):
         self.canvas.delete('all')
@@ -304,7 +334,7 @@ class GUI():
         self.discard_poly_button.grid(row = DRAW_POLY_ROW, column = 1,sticky = tk.W+tk.E)
         self.hide_buttons()
         self.draw_rect_button.config(state=tk.DISABLED)
-        self.drawing_obj = DrawPoly(self.bottom_frame,self.canvas,self.img_cnv,RADIUS)
+        self.drawing_obj = DrawPoly(self.bottom_frame,self.canvas,self.img_cnv,RADIUS, self.save_drawing)
 
     def draw_rect_func(self):
         self.deselect_all()
@@ -341,6 +371,15 @@ class GUI():
             self.draw_poly_button.grid(row = DRAW_POLY_ROW, columnspan = 2, sticky = tk.W + tk.E)
         self.drawing_obj.delete_self()        
         self.drawing_obj = None
+        print(f"Auto Tighten: {self.auto_tight_poly}")
+        if self.auto_tight_poly:
+            poly = self.img_cnv.polygons[-1]
+            for polyg in self.img_cnv.polygons:
+                polyg.select_poly = False
+            poly.select_poly = True
+            self.make_tight()
+            self.save_tight()
+            poly.select_poly = False
 
     def discard_drawing(self):
         self.show_buttons()

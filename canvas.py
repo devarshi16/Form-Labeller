@@ -34,13 +34,14 @@ class ImageOnCanvas():
         self.bbs = []
         self.polygons = []
         self.poly_type = []
+        self.poly_texts = []
         self.polygons_mutex = Lock()
         self.load_json()
         self.draw_bbs(self.bbs)
         self.drawing_polygon = False
 
     def current_state(self):
-        return self.bbs, self.polygons, self.poly_type, self.drawing_polygon
+        return self.bbs, self.polygons, self.poly_type, self.drawing_polygon, self.poly_texts
 
     def resize(self):
         self.canvas.update()
@@ -63,6 +64,7 @@ class ImageOnCanvas():
                     pts[i][0],pts[i][1] = int(pts[i][0]),int(pts[i][1])
                 self.bbs.append(pts)
                 self.poly_type.append(item["type"])
+                self.poly_texts.append(item.get("text", ""))
                 debug (2, str(self.poly_type))
             fl.close()
         except:
@@ -94,6 +96,7 @@ class ImageOnCanvas():
             pt_data["poly_points"] = pts
             pt_data["id"] = str(j)
             pt_data["type"] = poly.poly_type
+            pt_data["text"] = poly.text
             data["textBBs"].append(pt_data)
         self.polygons_mutex.release()
         if not os.path.exists(out_dir):
@@ -116,6 +119,8 @@ class ImageOnCanvas():
             self.polygons.append(Polygon(self.root,self.canvas,bb,radius=RADIUS))
         for i,pt in enumerate(self.poly_type):
             self.polygons[i].poly_type = pt
+        for i,pt in enumerate(self.poly_texts):
+            self.polygons[i].text = pt
         self.polygons_mutex.release()
         debug (3,"Total Polygons drawn:"+str(len(self.polygons)))
 
