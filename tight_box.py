@@ -51,7 +51,7 @@ class TightBox():
                 min_area_rect = cv2.minAreaRect(all_pts)
                 # Convert min area rect to box points (4 points)
                 box = cv2.boxPoints(min_area_rect)
-                box = np.int0(box)
+                box = np.intp(box)
                 for i,point in enumerate(p.points):
                     p.update_point(point,box[i][0],box[i][1])
                 print(box)
