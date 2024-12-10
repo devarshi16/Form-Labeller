@@ -2,12 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-eKYC/
+
 # C extensions
 *.so
-form_labeller.log
-# Vim swap files
-*.swp
+
 # Distribution / packaging
 .Python
 build/
@@ -129,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Temp files
+labeler/version.py
+logs/
+wandb/
+.idea/
+
+# Model files
+*.onnx
