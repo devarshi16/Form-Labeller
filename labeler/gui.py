@@ -128,7 +128,10 @@ class GUI():  # (TKMT.ThemedTKinterFrame):
             width=int(BUTTON_WIDTH / 2),
             style="Bold.TButton",
         )
+
+        self.tight_discard_button = Button(self.top_frame, text = 'Discard Tight', command = self.discard_tight)
         self.make_tight_button.grid(row=MAKE_TIGHT_ROW, columnspan=2, column=0, sticky=tk.W + tk.E)
+        self.tight_save_button = Button(self.top_frame, text = 'Accept Tight', command = self.save_tight)
 
         self.threshold_scale = Scale(
             self.top_frame, from_=0, to=255, orient=HORIZONTAL, width=int(BUTTON_WIDTH / 2), label="Binary Threshold"
@@ -163,7 +166,9 @@ class GUI():  # (TKMT.ThemedTKinterFrame):
         self.canvas = Canvas(self.bottom_frame, width=INIT_WIDTH - BUTTON_WIDTH, height=INIT_HEIGHT, borderwidth=1)
         self.root.bind("<Escape>", self.deselect_all)
         self.root.bind("<Control-a>", self.select_all)
-        self.root.bind("<Control-t>", self.make_tight)
+        self.root.bind("<t>", self.make_tight)
+        self.root.bind("<r>", self.discard_tight)
+        self.root.bind("<y>", self.save_tight)
         self.root.bind("<Control-s>", self.saver)
 
         self.image_name = None
@@ -384,14 +389,30 @@ class GUI():  # (TKMT.ThemedTKinterFrame):
         self.draw_poly_button.grid(row=DRAW_POLY_ROW, columnspan=2, sticky=tk.W + tk.E)
         self.drawing_obj = None
 
-    def make_tight(self):
+    def discard_tight(self, event=None, **kwargs):
+        self.tight_box_obj.discard_tight_box()
+        self.tight_save_button.grid_forget()
+        self.tight_discard_button.grid_forget()
+        self.make_tight_button.grid(row = MAKE_TIGHT_ROW, columnspan=2, sticky = tk.W+tk.E)
+        self.show_buttons()
+        self.tight_box_obj = None
+
+    def make_tight(self, event=None, **kwargs):
+        try:
+            self.discard_tight()
+        except AttributeError:
+            pass
         self.tight_box_obj = TightBox(self.root, self.img_cnv, self.threshold_scale.get())
         self.tight_box_obj.tight_box()
+        self.make_tight_button.grid_forget()
+        self.tight_save_button.grid(row = MAKE_TIGHT_ROW,column=0,columnspan=1, sticky = tk.W + tk.E)
+        self.tight_discard_button.grid(row = MAKE_TIGHT_ROW,column=1,columnspan=1, sticky = tk.W + tk.E)
 
-    def save_tight(self):
+    def save_tight(self, event=None, **kwargs):
         self.tight_box_obj.save_tight_box()
         self.make_tight_button.grid(row=MAKE_TIGHT_ROW, columnspan=2, sticky=tk.W + tk.E)
         self.tight_box_obj = None
+        self.deselect_all()
 
 
 gui = GUI()
