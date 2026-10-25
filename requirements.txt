@@ -1,2 +1,2 @@
-ttkthemes==2.4.0
+ttkthemes==3.3.0
 Pillow==13.0.0
