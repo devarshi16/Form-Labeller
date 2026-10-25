@@ -4,6 +4,13 @@ This tool helps in modifying/creating existing labels/annotations of images in I
 
 Libraries needed, `tkinter`,`json`
 
+Requires Python 3.11 or newer (Pillow 13 no longer supports Python 3.10).
+Install the pinned dependencies before running the application:
+
+```sh
+python -m pip install -r requirements.txt
+```
+
 To run the application, 
 
 ```
